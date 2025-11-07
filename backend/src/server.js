@@ -80,6 +80,32 @@ app.get('/profile', authMiddleware, (req, res) => {
   });
 });
 
+// Get product list
+app.get("/products", (req, res) => {
+  db.all("SELECT * FROM products", [], (err, rows) => {
+    if (err) return res.status(500).json({ message: "DB error" });
+    res.json({ products: rows });
+  });
+});
+
+// Create product (admin only)
+app.post("/products", authenticateToken, (req, res) => {
+  const { name, stock } = req.body;
+
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Not authorized" });
+  }
+
+  db.run(
+    "INSERT INTO products (name, stock) VALUES (?, ?)",
+    [name, stock],
+    function (err) {
+      if (err) return res.status(500).json({ message: "Failed to create product" });
+      res.json({ id: this.lastID, name, stock });
+    }
+  );
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
