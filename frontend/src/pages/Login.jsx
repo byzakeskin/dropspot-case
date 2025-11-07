@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -19,6 +21,7 @@ export default function Login() {
     if (data.token) {
       localStorage.setItem("token", data.token);
       setMessage("Login successful ✅");
+      navigate("/profile");
     } else {
       setMessage("Login failed ❌");
     }
@@ -50,4 +53,3 @@ export default function Login() {
     </div>
   );
 }
-
