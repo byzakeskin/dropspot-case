@@ -2,13 +2,10 @@ const express = require('express');
 const app = express();
 const PORT = 3001;
 
-app.get('/ping', (req, res) => {
-  res.send('pong');
-});
+app.use(express.json());
 
 const bcrypt = require('bcryptjs');
 const db = require('./db/database');
-app.use(express.json());
 
 app.post('/auth/signup', (req, res) => {
   const { email, password } = req.body;
