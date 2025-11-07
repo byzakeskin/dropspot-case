@@ -68,6 +68,16 @@ app.post('/auth/login', (req, res) => {
   });
 });
 
+const authMiddleware = require('./middleware/auth');
+
+app.get('/profile', authMiddleware, (req, res) => {
+  res.json({
+    message: "Authorized",
+    user: req.user
+  });
+});
+
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
